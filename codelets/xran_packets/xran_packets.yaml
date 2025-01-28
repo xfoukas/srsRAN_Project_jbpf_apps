@@ -1,0 +1,24 @@
+codeletset_id: xran_packets
+
+codelet_descriptor:
+
+  - codelet_name: codelet1
+    codelet_path: ${JBPF_CODELETS}/xran_packets/xran_packets_collect.o
+    hook_name: capture_xran_packet
+    priority: 1
+  - codelet_name: codelet2
+    codelet_path: ${JBPF_CODELETS}/xran_packets/xran_packets_report.o
+    hook_name: report_stats
+    priority: 2
+    out_io_channel:
+      - name: output_map
+        stream_id: "02000000000000000000000000000001"
+        serde:
+          file_path: ${JBPF_CODELETS}/xran_packets/xran_packet_info:packet_stats_serializer.so
+          protobuf:
+            package_path: ${JBPF_CODELETS}/xran_packets/xran_packet_info.pb
+            msg_name: packet_stats
+    linked_maps:
+      - map_name: output_tmp_map
+        linked_codelet_name: codelet1
+        linked_map_name: output_tmp_map            

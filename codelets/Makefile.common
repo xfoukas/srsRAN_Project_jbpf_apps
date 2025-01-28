@@ -1,0 +1,54 @@
+
+all: protos $(OBJECTS)
+
+$(OBJECTS): %.o : %.c
+	@echo "--------- $< ----------------------------------------------"
+	$(CC) $(INC) $(CFLAGS) -c $<
+	-$(VERIFIER_BIN) $(JBPF_VER_PARAMS) $@ || echo "$<: Failed verification"
+
+clean :
+	rm -f *.o *.pb.c *.pb.o *_serializer.c
+
+cleanall : clean
+	rm -f *.o *.pb.h *.pb *_serializer.so
+
+
+.PHONY: codelets-cleanall
+codelets-cleanall:
+	@for slib in $(DIRS) ; do \
+			(cd $$slib && make cleanall) || 1 ; \
+    done
+
+print-DIRS:
+	@echo $(DIRS)
+
+
+
+###############################################################################
+#
+# Build JBPF codelets. Input codelets have to be listed in FILES_AND_HOOKS
+# The input format is:
+#
+# FILES_AND_HOOKS := <code1>^<hook1> <code2>^<hook2> ...
+#
+# where <codeN> is a name of the codelet, proto and options (optional)
+# (without extensions; we assume these are the same)
+#
+# Usage example:
+#
+# FILES_AND_HOOKS := harq_fine^janus_harq_data \
+# 	  harq_coarse^janus_harq_data
+#
+###############################################################################
+
+.PHONY: protos
+protos: $(FILES_AND_HOOKS)
+
+.PHONY: $(FILES_AND_HOOKS)
+
+code = $(word 1,$(subst ^, ,$(1)))
+entry_schema = $(word 2,$(subst ^, ,$(1)))
+
+$(FILES_AND_HOOKS):
+	$(JBPF_PROTOBUF_CLI_BIN) serde -s $(call code, $@):$(call entry_schema, $@) -w $(CURDIR) -o $(CURDIR); \
+	rm -f $(CURDIR)/*_serializer.c	$(CURDIR)/*.pb.c

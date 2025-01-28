@@ -1,0 +1,25 @@
+
+CC = clang
+INC= -I${SRSRAN_OUT_DIR}/inc -I${JBPF_OUT_DIR}/inc  -I${NANO_PB} 
+
+# Use to disable JBPF_PATH printf
+#CFLAGS = -O3 -target bpf -Wall
+
+# Use to enable JBPF printf - useful in developing tests
+CFLAGS = -O2 -target bpf -Wall -DJBPF_EXPERIMENTAL_FEATURES -DJBPF_DEBUG_ENABLED -D__x86_64__ 
+SOURCES = $(wildcard *.c)
+OBJECTS = $(SOURCES:.c=.o)
+
+
+# For debug, only make files with benches
+INC_DEBUG= -I${SRSRAN_OUT_DIR}/inc -I${JBPF_OUT_DIR}/inc -I..
+
+#CFLAGS_DEBUG = -g -O0 -D GCC_DEBUG=1
+#BENCH = $(wildcard debug/*.c)
+#BENCH_OBJECTS = $(BENCH:.c=.e)
+
+
+# All top level folders with codelets
+DIRS := $(shell find . -maxdepth 1 -type d ! -name .)
+
+

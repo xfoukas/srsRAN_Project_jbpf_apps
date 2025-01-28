@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+
+message packet_inter_arrival_info_item {
+    repeated uint32 hist = 1;
+}
+
+message data_packet_stats_item {
+    required uint32 Packet_count = 1;
+    required uint64 Prb_count = 2;
+    required packet_inter_arrival_info_item packet_inter_arrival_info = 3;
+}
+
+message ctrl_packet_stats_item {
+    required uint32 Packet_count = 1;
+    required packet_inter_arrival_info_item packet_inter_arrival_info = 2;
+}
+
+message ul_packet_stats_item {
+    required data_packet_stats_item data_packet_stats = 1;
+}
+
+message dl_packet_stats_item {
+    required data_packet_stats_item data_packet_stats = 1;
+    required ctrl_packet_stats_item ctrl_packet_stats = 2;
+}
+
+message packet_stats {
+    required uint64 timestamp = 1;
+    required ul_packet_stats_item ul_packet_stats = 2;
+    required dl_packet_stats_item dl_packet_stats = 3;
+}
+
