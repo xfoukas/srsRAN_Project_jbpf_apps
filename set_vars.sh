@@ -16,5 +16,5 @@ export VERIFIER_BIN=$SRSRAN_DIR/out/bin/srsran_verifier_cli
 export JBPF_LCM_CLI_BIN=$JBPF_OUT_DIR/bin/jbpf_lcm_cli
 export JBPF_CODELETS=$SRSRAN_APPS_DIR/codelets
 
-source $SRSRAN_APPS_DIR/jbpf_protobuf/setup_jbpfp_env.sh
+source $SRSRAN_APPS_DIR/jbpf-protobuf/setup_jbpfp_env.sh
 export JBPF_PROTOBUF_CLI_BIN=$JBPFP_PATH/pkg/jbpf_protobuf_cli

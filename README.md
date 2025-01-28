@@ -26,16 +26,16 @@ This project used to build Jbpf codelets for srsRAN.
 ./init_submodules.sh
 ```
 
-## 2.2. Set environment
-```sh
-source ./set_vars.sh
-```
-
-## 2.3. Build srsRAN
+## 2.2. Build srsRAN
 
 Build srsRAN as detailed in https://github.com/xfoukas/srsRAN_Project_jbpf.
 
 Set environment variable __SRSRAN_DIR__ to the top level folder of where this is located.
+
+## 2.3. Set environment
+```sh
+source ./set_vars.sh
+```
 
 ## 2.4. Build jbpf_protobuf
 
